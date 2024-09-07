@@ -4,7 +4,7 @@
             <div id='title' class="text-white mt-12">註冊帳號</div>
             <div id='server_name' class="text-white mt-3">【測試伺服器】</div>
         </div>
-        <div class="w-[80%] h-[40%] flex　flex-col items-center">
+        <div class="w-[80%] flex　flex-col items-center">
             <div class="inp_group mt-3">
                 <input id='inp_phone' required>
                 <span class="">手機號碼</span>
@@ -23,7 +23,7 @@
                 <div id='btn_sendCode' class="btn">發送認證碼</div>
             </div>
             <div class="bg-white rounded flex justify-center items-center btn py-1 mb-2 mt-6" id='btn_submit'>送出</div>
-            <div class="login-container">
+            <div class="login-container w-full">
                 <button class="line-login-btn" @click="lineLogin">
                 <img src="https://upload.wikimedia.org/wikipedia/commons/4/41/LINE_logo.svg" alt="LINE Logo" class="line-logo" />
                 <span>LINE 登入</span>
@@ -160,26 +160,28 @@ import Box from '../components/box.vue';
 }
 
 .login-container {
+    margin-top: 20px;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
 .line-login-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(135deg, #00b900, #00c300);
-  border: none;
-  border-radius: 50px;
-  padding: 10px 25px;
-  color: white;
-  font-size: 16px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background 0.3s ease, box-shadow 0.3s ease;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  z-index: 3;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #00b900, #00c300);
+    border: none;
+    /* border-radius: 50px; */
+    padding: 10px 25px;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 3;
 }
 
 .line-login-btn:hover {
