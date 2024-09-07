@@ -1,26 +1,50 @@
 <template>
     <Box>
-        <div id='title' class="text-white mt-12">註冊帳號</div>
-        <div id='server_name' class="text-white mt-3"></div>
-        <div id="go_top">
+        <div class="h-[25%]">
+            <div id='title' class="text-white mt-12">註冊帳號</div>
+            <div id='server_name' class="text-white mt-3">【測試伺服器】</div>
+        </div>
+        <div class="w-[80%] h-[40%] flex　flex-col items-center">
+            <div class="inp_group mt-3">
+                <input id='inp_phone' required>
+                <span class="">手機號碼</span>
+                <i></i>
+            </div>
+            <div class="inp_group mt-2">
+                <input id='inp_validationCode' required>
+                <span class="column">驗證碼</span>
+                <i style="width: 58%;"></i>
+                <p id='identifyCode'></p>
+            </div>
+            <div class="inp_group mt-2">
+                <input id='inp_code' required>
+                <span>認證碼</span>
+                <i style="width: 60%;"></i>
+                <div id='btn_sendCode' class="btn">發送認證碼</div>
+            </div>
+            <div class="bg-white rounded flex justify-center items-center btn py-1 mb-2 mt-6" id='btn_submit'>送出</div>
             <div class="login-container">
                 <button class="line-login-btn" @click="lineLogin">
                 <img src="https://upload.wikimedia.org/wikipedia/commons/4/41/LINE_logo.svg" alt="LINE Logo" class="line-logo" />
                 <span>LINE 登入</span>
                 </button>
             </div>
-            <hr class="mt-5">
+        </div>
+        <!-- <div class="h-[3%] w-[80%]">
+            <hr>
+        </div>
+        <div class="h-[30%] w-[80%] flex flex-col justify-center">
             <div
-            class="bg-white rounded flex justify-center items-center btn py-1 mt-5"
+            class="w-full bg-white rounded flex justify-center items-center btn py-1"
             @click = "router.push('/forgetPassword')"
             >找回密碼
             </div>
             <div 
-                class="bg-white rounded flex justify-center items-center btn py-1 mt-3"
-                @click = ""
-                >客服中心
+            class="w-full bg-white rounded flex justify-center items-center btn py-1 mt-5"
+            @click = ""
+            >客服中心
             </div>
-        </div>
+        </div> -->
     </Box>
 </template>
 <script setup>
