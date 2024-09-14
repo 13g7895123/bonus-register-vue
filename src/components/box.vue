@@ -1,16 +1,35 @@
 <template>
     <div id='bg' class="w-full h-full">
-        <div id="phone-validation-box" class="rounded-lg">
+        <div id="box"
+        :class="`rounded-lg`"
+        :style="`--box-width: ${boxWidth}px; --box-height: ${boxHeight}px; width: ${boxWidth}px; height: ${boxHeight}px;`">
             <div id="mask"></div>
         </div>
     </div>
     <div id="content">
-        <div id="content-box">
+        <div id="content-box" :style="`width: ${boxWidth}px; height: ${boxHeight}px;`">
             <slot></slot>
         </div>
-        
     </div>
 </template>
+<script setup>
+import { ref } from 'vue';
+
+const props = defineProps({
+    initialWidth: {
+        type: Number,
+        default: 100,
+    },
+    initialHeight: {
+        type: Number,
+        default: 100,
+    },
+});
+
+const boxWidth = ref(props.initialWidth);
+const boxHeight = ref(props.initialHeight);
+
+</script>
 <style scoped>
 #content{
     display: flex;
@@ -19,11 +38,18 @@
     justify-content: center;
 }
 #content-box{
-    width: 350px;
-    height: 510px;
     display: flex;
     flex-direction: column;
     align-items: center;
+    overflow: hidden;
+    inset: 3px;
+    z-index: 2;
+}
+#box{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    backdrop-filter: blur(10px);
     overflow: hidden;
     inset: 3px;
     z-index: 2;
@@ -58,41 +84,31 @@
     background-color: black;
     z-index: 1;
 }
-#phone-validation-box{
-    width: 350px;
-    height: 510px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    backdrop-filter: blur(10px);
-    overflow: hidden;
-    inset: 3px;
-    z-index: 2;
-}
-#phone-validation-box::before{
+
+#box::before{
     content: '';
     position: absolute;
     top: -50%;
     left: -50%;
-    width: 400px;
-    height: 510px;
+    width: var(--box-width);
+    height: var(--box-height);
     background: linear-gradient(60deg, transparent, #45f3ff, #45f3ff);
     transform-origin: bottom right;
     animation: animate 6s linear infinite;
-    z-index: -1;
+    /* z-index: -1; */
 }
-#phone-validation-box::after{
+#box::after{
     content: '';
     position: absolute;
     top: -50%;
     left: -50%;
-    width: 400px;
-    height: 510px;
+    width: var(--box-width);
+    height: var(--box-height);
     background: linear-gradient(60deg, transparent, #d9138a, #d9138a);
     transform-origin: bottom right;
     animation: animate 6s linear infinite;
     animation-delay: -3s;
-    z-index: -1;
+    /* z-index: -1; */
 }
 @keyframes animate{
     0%{
@@ -101,20 +117,5 @@
     100%{
         transform: rotate(360deg);
     }
-}
-/* 針對插槽內的按鈕，排除背景變色效果 */
-::slotted(button) {
-    position: relative;
-    background-color: initial;
-    color: initial;
-    box-shadow: none;
-    transition: none;
-    filter: none;
-    z-index: 1;
-}
-
-::slotted(button:hover) {
-  background-color: initial;
-  color: initial;
 }
 </style>

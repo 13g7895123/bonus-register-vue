@@ -1,39 +1,21 @@
 <template>
-    <Box>
-        <div class="h-[25%]">
+    <Box :initialWidth="350" :initialHeight="350">
+        <div class="">
             <div id='title' class="text-white mt-12">註冊帳號</div>
-            <div id='server_name' class="text-white mt-3">【測試伺服器】</div>
+            <div id='server_name' class="text-white mt-3">【{{ serverName }}】</div>
         </div>
         <div class="w-[80%] flex　flex-col items-center">
-            <div class="inp_group mt-3">
-                 <input id='inp_phone' required>
-                <span class="">手機號碼</span>
-                <i></i>
-            </div>
-            <div class="inp_group mt-2">
-                <input id='inp_validationCode' required>
-                <span class="column">驗證碼</span>
-                <i style="width: 58%;"></i>
-                <p id='identifyCode'></p>
-            </div>
-            <div class="inp_group mt-2">
-                <input id='inp_code' required>
-                <span>認證碼</span>
-                <i style="width: 60%;"></i>
-                <div id='btn_sendCode' class="btn">發送認證碼</div>
-            </div>
-            <div class="rounded flex justify-center items-center btn py-1 mb-2 mt-6" id='btn_submit'>送出</div>
-            <div class="login-container w-full">
+            <div class="login-container w-full mt-5">
                 <button class="line-login-btn" @click="lineLogin">
                 <img src="https://upload.wikimedia.org/wikipedia/commons/4/41/LINE_logo.svg" alt="LINE Logo" class="line-logo" />
                 <span>LINE 登入</span>
                 </button>
             </div>
         </div>
-        <!-- <div class="h-[3%] w-[80%]">
+        <div class="h-[3%] w-[80%] mt-5">
             <hr>
         </div>
-        <div class="h-[30%] w-[80%] flex flex-col justify-center">
+        <div class="h-[30%] w-[80%] flex flex-col mt-3">
             <div
             class="w-full bg-white rounded flex justify-center items-center btn py-1"
             @click = "router.push('/forgetPassword')"
@@ -44,11 +26,29 @@
             @click = ""
             >客服中心
             </div>
-        </div> -->
+        </div>
     </Box>
 </template>
 <script setup>
 import Box from '../components/box.vue';
+import axios from 'axios';
+import { useRoute, useRouter } from 'vue-router';
+import { ref, onMounted } from 'vue';
+import { serverUrl } from '../config.js';
+
+const route = useRoute();
+const serverCode = ref('');     // 伺服器代號
+const serverName = ref('');     // 伺服器名稱
+
+onMounted(async () => {
+    serverCode.value = route.params.serverCode;
+    let response = await axios.get(`${serverUrl}/${serverCode.value}`);
+
+    if (response.data.success){
+        serverName.value = response.data.data.name;
+    }
+})
+
 
 </script>
 <style scoped>
@@ -61,7 +61,6 @@ import Box from '../components/box.vue';
     margin-top: 48px;
     z-index: 20;
 }
-
 #server_name{
     display: block;
     font-size: 1.17em !important;
@@ -71,7 +70,6 @@ import Box from '../components/box.vue';
     /* margin-top: 0.5em; */
     position: relative;
 }
-
 .inp_group input{
     position: relative;
     width: 100%;
@@ -85,7 +83,6 @@ import Box from '../components/box.vue';
     letter-spacing: 0.05em;
     transition: 0.5s;
 }
-
 .inp_group span{
     position: absolute;
     left: 0;
@@ -96,13 +93,11 @@ import Box from '../components/box.vue';
     letter-spacing: 0.05em;
     transition: 0.5s;
 }
-
 .inp_group input:valid ~span,
 .inp_group input:focus ~span{
     font-size: 0.75em;
     transform: translate(-10px, -15px);
 }
-
 .inp_group i{
     position: absolute;
     left: 0;
@@ -111,7 +106,6 @@ import Box from '../components/box.vue';
     width: 100%;
     height: 2px;
 }
-
 #btn_sendCode{
     padding: 2px 10px 2px 10px;
     border-radius: 5px;
@@ -119,19 +113,16 @@ import Box from '../components/box.vue';
     right: 0px;
     top: 20px;
 }
-
 .btn{
     display: flex;
     cursor: pointer;
     background-color: #fff;
 }
-
 .code-box{
     position: absolute;
     right: 0;
     top: 14px;
 }
-
 #identifyCode { 
     cursor: pointer;
     font-family:Arial; 
@@ -149,23 +140,19 @@ import Box from '../components/box.vue';
     right: 0;
     top: 14px;
 } 
-
 .swal2-container{
     position: absolute;
 }
-
 #go_top{
     width: 80%;
     z-index: 999;
 }
-
 .login-container {
     margin-top: 20px;
   display: flex;
   justify-content: center;
   align-items: center;
 }
-
 .line-login-btn {
     width: 100%;
     display: flex;
@@ -183,12 +170,10 @@ import Box from '../components/box.vue';
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     z-index: 3;
 }
-
 .line-login-btn:hover {
   background: linear-gradient(135deg, #009e00, #00b900);
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
-
 .line-logo {
   width: 24px;
   height: 24px;

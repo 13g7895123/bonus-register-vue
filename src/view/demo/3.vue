@@ -1,6 +1,6 @@
 <template>
-    <Box>
-        <div class="h-[25%]">
+    <Box :initialWidth="350" :initialHeight="580">
+        <div class="">
             <div id='title' class="text-white mt-12">註冊帳號</div>
             <div id='server_name' class="text-white mt-3">【測試伺服器】</div>
         </div>
@@ -22,7 +22,9 @@
                 <i style="width: 60%;"></i>
                 <div id='btn_sendCode' class="btn">發送認證碼</div>
             </div>
-            <div class="rounded flex justify-center items-center btn py-1 mb-2 mt-6" id='btn_submit'>送出</div>
+            <div class="rounded flex justify-center items-center btn py-2 mb-2 mt-6" id='btn_submit'
+            style="background-color: #0C5ED7; color: white; font-weight: 800;"
+            >送出</div>
             <div class="login-container w-full">
                 <button class="line-login-btn" @click="lineLogin">
                 <img src="https://upload.wikimedia.org/wikipedia/commons/4/41/LINE_logo.svg" alt="LINE Logo" class="line-logo" />
@@ -30,10 +32,10 @@
                 </button>
             </div>
         </div>
-        <!-- <div class="h-[3%] w-[80%]">
+        <div class="h-[3%] w-[80%] mt-5">
             <hr>
         </div>
-        <div class="h-[30%] w-[80%] flex flex-col justify-center">
+        <div class="w-[80%] flex flex-col justify-center">
             <div
             class="w-full bg-white rounded flex justify-center items-center btn py-1"
             @click = "router.push('/forgetPassword')"
@@ -44,11 +46,11 @@
             @click = ""
             >客服中心
             </div>
-        </div> -->
+        </div>
     </Box>
 </template>
 <script setup>
-import Box from '../components/box.vue';
+import Box from '../../components/box.vue';
 
 </script>
 <style scoped>

@@ -22,7 +22,9 @@
                 <i style="width: 60%;"></i>
                 <div id='btn_sendCode' class="btn">發送認證碼</div>
             </div>
-            <div class="rounded flex justify-center items-center btn py-1 mb-2 mt-6" id='btn_submit'>送出</div>
+            <div class="rounded flex justify-center items-center btn py-2 mb-2 mt-6" id='btn_submit'
+            style="background-color: #0C5ED7; color: white; font-weight: 800;"
+            >送出</div>
             <div class="login-container w-full">
                 <button class="line-login-btn" @click="lineLogin">
                 <img src="https://upload.wikimedia.org/wikipedia/commons/4/41/LINE_logo.svg" alt="LINE Logo" class="line-logo" />
@@ -48,7 +50,7 @@
     </Box>
 </template>
 <script setup>
-import Box from '../components/box.vue';
+import Box from '../../components/box.vue';
 
 </script>
 <style scoped>

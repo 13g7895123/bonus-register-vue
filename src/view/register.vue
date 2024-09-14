@@ -45,6 +45,9 @@
 </div>
 </template>
 <style scoped>
+*{
+    color: #555;
+}
 #bg{
     display: flex;
     align-items: center;
