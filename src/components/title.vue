@@ -5,10 +5,9 @@
     </div>
 </template>
 <script setup>
-import axios from 'axios';
 import { useRoute } from 'vue-router';
 import { ref, onMounted } from 'vue';
-import { serverUrl } from '../config.js';
+import { serverInfo } from '../api/server.js'
 
 const route = useRoute();
 const serverCode = ref('');     // 伺服器代號
@@ -16,10 +15,10 @@ const serverName = ref('');     // 伺服器名稱
 
 onMounted(async () => {
     serverCode.value = route.params.serverCode;
-    let response = await axios.get(`${serverUrl}/${serverCode.value}`);
+    const serverResult = await serverInfo(serverCode.value);
 
-    if (response.data.success){
-        serverName.value = response.data.data.name;
+    if (serverResult.success){
+        serverName.value = serverResult.data.name;
     }
 })
 </script>

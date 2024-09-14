@@ -18,12 +18,12 @@
         </div>
         <div class="h-[30%] w-[80%] flex flex-col mt-3">
             <div
-            class="w-full bg-white rounded flex justify-center items-center btn py-1"
+            class="w-full bg-white rounded-lg flex justify-center items-center btn py-2"
             @click = "router.push('/forgetPassword')"
             >找回密碼
             </div>
             <div 
-            class="w-full bg-white rounded flex justify-center items-center btn py-1 mt-5"
+            class="w-full bg-white rounded-lg flex justify-center items-center btn py-2 mt-5"
             @click = ""
             >客服中心
             </div>
@@ -33,9 +33,6 @@
 <script setup>
 import Box from '../components/box.vue';
 import Title from '../components/title.vue';
-
-
-
 </script>
 <style scoped>
 .btn{
