@@ -1,6 +1,6 @@
 <template>
     <Box :initialWidth="350" :initialHeight="350">
-        <div class="">
+        <div>
             <div id='title' class="text-white mt-12">註冊帳號</div>
             <div id='server_name' class="text-white mt-3">【{{ serverName }}】</div>
         </div>

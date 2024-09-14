@@ -1,9 +1,9 @@
 <template>
-    <div id='bg' class="w-full h-full">
-    <div id="register-box" class="rounded-lg">
-        <div id="mask"></div>
-        <div id='title' class="text-white mt-12">註冊帳號</div>
-        <div id='server_name' class="text-white mt-3"></div>
+    <Box :initialWidth="350" :initialHeight="500">
+        <div>
+            <div id='title' class="text-white mt-12">註冊帳號</div>
+            <div id='server_name' class="text-white mt-3"></div>
+        </div>
         <form id="form_area">
             <div class="inp_group mt-3">
                 <input id='inp_account' @blur="accountRule" required>
@@ -41,64 +41,16 @@
                 class="bg-white rounded flex justify-center items-center btn py-1 mt-3"
                 >取消註冊</div>
         </form>
-    </div>
-</div>
+    </Box>
 </template>
+<script setup>
+import Box from '../components/box.vue';
+</script>
 <style scoped>
 *{
     color: #555;
 }
-#bg{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: no-repeat;
-    background-size: cover;
-    background-position: center;
-    animation: bg-rotate 5s linear infinite;
-}
-@keyframes bg-rotate{
-    100% {
-        filter: hue-rotate(360deg);
-    }
-} 
-html {
-    overflow: -moz-hidden-unscrollable;
-    height: 100%;
-}
-body::-webkit-scrollbar {
-    display: none;
-}
-body {
-    -ms-overflow-style: none;
-    height: 100%;
-	width: calc(100vw + 18px);
-	overflow: auto;
-}
-/* --- scroll bar hide end --- */
-#mask{
-    width: calc(100% - 6px);
-    height: calc(100% - 6px);
-    position: absolute;
-    top: 3px;
-    left: 3px;
-    border-radius: 8px;
-    background-color: black;
-    z-index: 1;
-}
 
-#register-box{
-    width: 350px;
-    /* height: 560px; */
-    height: 500px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    backdrop-filter: blur(10px);
-    overflow: hidden;
-    inset: 3px;
-    z-index: 20;
-}
 
 #title{
     display: block;
@@ -113,40 +65,7 @@ body {
     z-index: 20;
 }
 
-#register-box::before{
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 400px;
-    height: 570px;
-    background: linear-gradient(60deg, transparent, #45f3ff, #45f3ff);
-    transform-origin: bottom right;
-    animation: animate 6s linear infinite;
-    z-index: -1;
-}
 
-#register-box::after{
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 400px;
-    height: 570px;
-    background: linear-gradient(60deg, transparent, #d9138a, #d9138a);
-    transform-origin: bottom right;
-    animation: animate 6s linear infinite;
-    animation-delay: -3s;
-    z-index: -1;
-}
-@keyframes animate{
-    0%{
-        transform: rotate(0deg);
-    }
-    100%{
-        transform: rotate(360deg);
-    }
-}
 
 h2, h3, #form_area{
     z-index: 20;
