@@ -1,9 +1,5 @@
 const routes = [ 
     {
-        path: "/",
-        component: () => import('../view/phone.vue'),
-    },
-    {
         path: "/box",
         component: () => import('../components/box.vue'),
     },
@@ -20,12 +16,15 @@ const routes = [
         component: () => import('../view/demo/3.vue'),
     },
     {
-        // path: "/verify",
+        path: "/demo/4",
+        component: () => import('../view/demo/verifyCode.vue'),
+    },
+    {
         path: "/verify/:serverCode",
         component: () => import('../view/verify.vue'),
     },
     {
-        path: "/register",
+        path: "/register/:serverCode",
         component: () => import('../view/register.vue'),
     },
 ]

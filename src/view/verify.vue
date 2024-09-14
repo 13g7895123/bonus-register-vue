@@ -1,9 +1,10 @@
 <template>
     <Box :initialWidth="350" :initialHeight="350">
-        <div>
+        <Title/>
+        <!-- <div>
             <div id='title' class="text-white mt-12">註冊帳號</div>
             <div id='server_name' class="text-white mt-3">【{{ serverName }}】</div>
-        </div>
+        </div> -->
         <div class="w-[80%] flex　flex-col items-center">
             <div class="login-container w-full mt-5">
                 <button class="line-login-btn" @click="lineLogin">
@@ -31,23 +32,8 @@
 </template>
 <script setup>
 import Box from '../components/box.vue';
-import axios from 'axios';
-import { useRoute, useRouter } from 'vue-router';
-import { ref, onMounted } from 'vue';
-import { serverUrl } from '../config.js';
+import Title from '../components/title.vue';
 
-const route = useRoute();
-const serverCode = ref('');     // 伺服器代號
-const serverName = ref('');     // 伺服器名稱
-
-onMounted(async () => {
-    serverCode.value = route.params.serverCode;
-    let response = await axios.get(`${serverUrl}/${serverCode.value}`);
-
-    if (response.data.success){
-        serverName.value = response.data.data.name;
-    }
-})
 
 
 </script>
@@ -55,17 +41,7 @@ onMounted(async () => {
 .btn{
     color: #555;
 }
-#title{
-    display: block;
-    font-size: 1.5em !important;
-    margin-top: 48px;
-    z-index: 20;
-}
-#server_name{
-    display: block;
-    font-size: 1.17em !important;
-    z-index: 20;
-}
+
 .inp_group{
     /* margin-top: 0.5em; */
     position: relative;

@@ -1,9 +1,6 @@
 <template>
-    <Box :initialWidth="350" :initialHeight="500">
-        <div>
-            <div id='title' class="text-white mt-12">註冊帳號</div>
-            <div id='server_name' class="text-white mt-3"></div>
-        </div>
+    <Box :initialWidth="350" :initialHeight="520">
+        <Title/>
         <form id="form_area">
             <div class="inp_group mt-3">
                 <input id='inp_account' @blur="accountRule" required>
@@ -26,60 +23,63 @@
                 <input type="text" id="datepicker" placeholder="出生年月日" size="30">
                 <i></i>
             </div> -->
-            <div class="inp_group mt-2">
+            <div class="inp_group mt-2 flex">
                 <input id='inp_validationCode' required>
                 <span class="column">驗證碼</span>
                 <i style="width: 58%;"></i>
-                <p id='identifyCode'></p>
+                <canvas ref="captchaCanvas" @click="generateCaptcha" class='bg-[#BDBDBD] cursor-pointer' width="100" height="30"></canvas>
             </div>
             <div 
                 id="btn-submit"
-                class="bg-white rounded flex justify-center items-center btn py-1 mt-6"
+                class="bg-[#42A5F5] text-white font-bold rounded flex justify-center items-center py-2 mt-6 cursor-pointer"
                 >提交註冊</div>
             <div
                 id='btn-cancel-register'
-                class="bg-white rounded flex justify-center items-center btn py-1 mt-3"
+                class="bg-[#BDBDBD] text-[#555] font-bold rounded flex justify-center items-center py-2 mt-3 cursor-pointer"
                 >取消註冊</div>
         </form>
     </Box>
 </template>
 <script setup>
 import Box from '../components/box.vue';
+import Title from '../components/title.vue';
+import { ref, onMounted } from 'vue';
+
+const captcha = ref('');  // 存儲驗證碼
+const captchaCanvas = ref(null); // 參考 canvas 元素
+
+onMounted(() => {
+    generateCaptcha();
+})
+
+// 隨機生成驗證碼
+const generateCaptcha = () => {
+  captcha.value = Math.random().toString(36).substr(2, 4).toUpperCase();
+  drawCaptcha(); // 在畫布上繪製驗證碼
+  console.log(captcha.value)
+};
+
+// 在畫布上繪製驗證碼
+const drawCaptcha = () => {
+    const canvas = captchaCanvas.value;
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height); // 清除畫布
+    ctx.font = '24px Arial';
+    ctx.fillStyle = '#000'; // 字體顏色
+    ctx.fillText(captcha.value, 20, 25); // 繪製驗證碼到畫布上
+};
 </script>
 <style scoped>
-*{
-    color: #555;
-}
-
-
-#title{
-    display: block;
-    font-size: 1.5em !important;
-    margin-top: 48px;
-    z-index: 20;
-}
-
-#server_name{
-    display: block;
-    font-size: 1.17em !important;
-    z-index: 20;
-}
-
-
-
 h2, h3, #form_area{
     z-index: 20;
 }
-
 #form_area{
     width: 80%;
 }
-
 .inp_group{
     /* margin-top: 0.5em; */
     position: relative;
 }
-
 .inp_group input{
     position: relative;
     width: 100%;
@@ -93,7 +93,6 @@ h2, h3, #form_area{
     letter-spacing: 0.05em;
     transition: 0.5s;
 }
-
 .inp_group span{
     position: absolute;
     left: 0;
@@ -104,13 +103,11 @@ h2, h3, #form_area{
     letter-spacing: 0.05em;
     transition: 0.5s;
 }
-
 .inp_group input:valid ~span,
 .inp_group input:focus ~span{
     font-size: 0.75em;
     transform: translate(-10px, -15px);
 }
-
 .inp_group i{
     position: absolute;
     left: 0;
@@ -119,7 +116,6 @@ h2, h3, #form_area{
     width: 100%;
     height: 2px;
 }
-
 #btn_send_code{
     padding: 2px 10px 2px 10px;
     border-radius: 5px;
@@ -127,19 +123,16 @@ h2, h3, #form_area{
     right: 0px;
     top: 20px;
 }
-
 .btn{
     display: flex;
     cursor: pointer;
     background-color: #fff;
 }
-
 .code-box{
     position: absolute;
     right: 0;
     top: 14px;
 }
-
 #identifyCode { 
     cursor: pointer;
     font-family:Arial; 
@@ -157,7 +150,6 @@ h2, h3, #form_area{
     right: 0;
     top: 14px;
 }
-
 .notice{
     position: absolute !important;
     left: auto !important;
