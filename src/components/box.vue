@@ -1,19 +1,29 @@
 <template>
-    <div id='bg' class="w-full h-full">
+    <div id='bg' class="w-full h-full" :style="backgroundStyle">
+        <!-- <ParticleCanvas/> -->
         <div id="box"
         :class="`rounded-lg`"
         :style="`--box-width: ${boxWidth}px; --box-height: ${boxHeight}px; width: ${boxWidth}px; height: ${boxHeight}px;`">
             <div id="mask"></div>
         </div>
     </div>
-    <div id="content">
+    <div id="content" class="flex items-center">
         <div id="content-box" :style="`width: ${boxWidth}px; height: ${boxHeight}px;`">
+            <Title @serverData="handleServerData"/>
             <slot></slot>
         </div>
     </div>
 </template>
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
+import Title from './title.vue';
+// import ParticleCanvas from './particleCanvas.vue'
+
+const nowYear = ref('');
+
+onMounted(() => {
+    nowYear.value = new Date().getFullYear();
+})
 
 const props = defineProps({
     initialWidth: {
@@ -28,28 +38,36 @@ const props = defineProps({
 
 const boxWidth = ref(props.initialWidth);
 const boxHeight = ref(props.initialHeight);
+const backgroundStyle = ref({});
+const bgUrl = ref('');
+
+const handleServerData = (data) => {
+    bgUrl.value = data.bg_img_path;
+    emit('serverData', data);
+
+    backgroundStyle.value = {
+        backgroundImage: `url(https://admin.pcgame.tw${bgUrl.value})`,
+    }
+};
+
+const emit = defineEmits(['serverData']);
 
 </script>
 <style scoped>
-#content{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
 #content-box{
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     overflow: hidden;
-    inset: 3px;
+    /* inset: 3px; */
     z-index: 2;
 }
 #box{
     display: flex;
     flex-direction: column;
     align-items: center;
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(1px);
     overflow: hidden;
     inset: 3px;
     z-index: 2;
@@ -81,11 +99,11 @@ const boxHeight = ref(props.initialHeight);
     top: 3px;
     left: 3px;
     border-radius: 8px;
-    background-color: black;
+    background-color: rgba(0, 0, 0, 0.6);
     z-index: 1;
 }
 
-#box::before{
+/* #box::before{
     content: '';
     position: absolute;
     top: -50%;
@@ -95,7 +113,6 @@ const boxHeight = ref(props.initialHeight);
     background: linear-gradient(60deg, transparent, #45f3ff, #45f3ff);
     transform-origin: bottom right;
     animation: animate 6s linear infinite;
-    /* z-index: -1; */
 }
 #box::after{
     content: '';
@@ -108,8 +125,8 @@ const boxHeight = ref(props.initialHeight);
     transform-origin: bottom right;
     animation: animate 6s linear infinite;
     animation-delay: -3s;
-    /* z-index: -1; */
-}
+} */
+
 @keyframes animate{
     0%{
         transform: rotate(0deg);

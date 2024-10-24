@@ -1,11 +1,15 @@
 <template>
-    <Box :initialWidth="350" :initialHeight="420" @serverData="handleServerData">
+    <Box :initialWidth="350" :initialHeight="350" @serverData="handleServerData">
         <div class="w-[80%] flex　flex-col items-center">
-            <div class="login-container w-full mt-5">
-                <button class="line-login-btn" @click="lineLogin">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/4/41/LINE_logo.svg" alt="LINE Logo" class="line-logo" />
-                <span>LINE 登入</span>
-                </button>
+            <div 
+            class="w-full bg-[#42A5F5] hover:bg-[#5783db] text-white font-bold rounded-lg flex justify-center items-center py-2 mt-3 cursor-pointer"
+            @click = "lineLogin('transfer')"
+            >我是移轉方
+            </div>
+            <div 
+            class="w-full bg-[#00c300] hover:bg-[#00b900] text-white font-bold rounded-lg flex justify-center items-center py-2 mt-3 cursor-pointer"
+            @click = "lineLogin('receiver')"
+            >我是接收方
             </div>
         </div>
         <div class="h-[3%] w-[80%] mt-5">
@@ -13,55 +17,36 @@
         </div>
         <div class="h-[30%] w-[80%] flex flex-col mt-3">
             <div
-            class="w-full bg-[#FF8314] hover:bg-[#FA7614] text-white font-bold rounded-lg flex justify-center items-center py-2 cursor-pointer"
-            @click = "router.push(`/forget-password/verify/${serverCode}`)"
-            >找回密碼
-            </div>
-            <div 
-            class="w-full bg-[#42A5F5] hover:bg-[#5783db] text-white font-bold rounded-lg flex justify-center items-center py-2 mt-3 cursor-pointer"
-            @click = "router.push(`/account-transfer/choose-identify/${serverCode}`)"
-            >帳號轉移
-            </div>
-            <div 
-            class="w-full bg-[#42A5F5] hover:bg-[#5783db] text-white font-bold rounded-lg flex justify-center items-center py-2 mt-3 cursor-pointer"
-            @click = "goService"
-            >客服中心
+            class="w-full bg-[#c4c4c4] hover:bg-[#b3b3b3] text-[#555] font-bold rounded-lg flex justify-center items-center cursor-pointer py-2"
+            @click = "router.push(`/verify/${serverCode}`)"
+            >回到註冊帳號
             </div>
         </div>
     </Box>
-    <!-- footer -->
-    <div class="w-full absolute left-1/2 -translate-x-1/2 bottom-3 hidden md:flex flex-col items-center">
-        <img class="w-[13%] sm:1/3" src="../assets/logo.webp">
-        <span><b>大福數位科技</b> © {{ nowYear }}</span>
-        <span>Copyright © gohost Corporation.</span>
-    </div>
 </template>
 <script setup>
-import Box from '../components/box.vue';
-import { lineParams, lineLoginBaseUrl, serviceUrl, scope } from '../config.js';
-import { saveStateApi } from '../api/line.js'
+import Box from '../../components/box.vue';
+import { lineParams, lineLoginBaseUrl, scope } from '../../config.js';
+import { saveStateApi } from '../../api/line.js'
 import { ref, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import Swal from 'sweetalert2';
-import { serverInfo } from '../api/server';
 
-const serverCode = ref('');
 const route = useRoute();
 const router = useRouter();
-const nowYear = ref('');
+const serverCode = ref('');
 
 onMounted(() => {
     serverCode.value = route.params.serverCode;
-    nowYear.value = new Date().getFullYear();
-})
+});
 
 const handleServerData = (data) => {
     serverCode.value = data.code_name;
 }
 
-const lineLogin = async() => {
+const lineLogin = async(type) => {
     lineParams.state = generateUniqueCode();
-    await saveState();    // 儲存state
+    await saveState(type);    // 儲存state
 
     const params = new URLSearchParams(lineParams).toString();
     const lineLoginUrl = `${lineLoginBaseUrl}?${params}&scope=${scope}`;
@@ -69,11 +54,11 @@ const lineLogin = async() => {
     window.location.href = lineLoginUrl;
 }
 
-const saveState = async() => {
+const saveState = async(type) => {
     const data = {
         state: lineParams.state,
-        serverCode: serverCode.value,  
-        page: 'register',      
+        serverCode: serverCode.value,     
+        page: `account-transfer-${type}`,   
     }
     const result = await saveStateApi(data);
     
@@ -96,17 +81,6 @@ const generateUniqueCode = () => {
     const uniqueCode = timestamp + randomString;
 
     return uniqueCode;
-}
-
-const goTransfer = () => {
-
-}
-
-const goService = async() => {
-    const serverResult = await serverInfo(serverCode.value);
-    const url = (serverResult.success) ? serverResult.data.customer_service_url : serviceUrl;
-
-    window.open(url, '_blank');
 }
 </script>
 <style scoped>

@@ -2,20 +2,24 @@
     <Box :initialWidth="350" :initialHeight="520">
         <form id="form_area">
             <div class="inp_group mt-3">
-                <input id='inp_account' v-model="account" @blur="accountBlur" required>
+                <select id='inp_account' v-model="account" required>
+                    <option 
+                    v-for="account in accounts" 
+                    :value="account"
+                    class="bg-black">{{ account }}</option>
+                </select>
                 <span class="column">遊戲帳號</span>
-                <p class="notice text-red font-bold">{{ accountMsg }}</p>
                 <i></i>
             </div>
             <div class="inp_group mt-2">
                 <input id='inp_password' v-model="password" type="password" @blur="passwordBlur" required>
-                <span id='col_password' class="column">密碼</span>
-                <p class="notice text-red font-bold">{{ passwordMsg }}</p>
+                <span id='col_password' class="column">新密碼</span>
+                <p id='notice_password' class="notice font-extrabold">{{ passwordMsg }}</p>
                 <i></i>
             </div>
             <div class="inp_group mt-2">
                 <input id='inp_checkPassword' v-model="passwordCheck" type="password" required style="white-space: normal;">
-                <span class="column">確認密碼</span>
+                <span class="column">確認新密碼</span>
                 <i></i>
             </div>
             <div class="inp_group mt-2 flex">
@@ -26,28 +30,28 @@
             </div>
             <div 
                 id="btn-submit"
-                class="bg-[#42A5F5] hover:bg-[#5783db] text-white font-bold rounded-lg flex justify-center items-center py-2 mt-6 cursor-pointer"
+                class="bg-[#42A5F5] text-white font-bold rounded-lg flex justify-center items-center py-2 mt-6 cursor-pointer"
                 @click="submit"
-                >提交註冊</div>
+                >提交</div>
             <div
                 id='btn-cancel-register'
-                class="bg-[#c4c4c4] hover:bg-[#b3b3b3] text-[#555] font-bold rounded-lg flex justify-center items-center py-2 mt-3 cursor-pointer"
+                class="bg-[#BDBDBD] text-[#555] font-bold rounded-lg flex justify-center items-center py-2 mt-3 cursor-pointer"
                 @click = "router.push(`/verify/${serverCode}`)"
-                >取消註冊</div>
+                >取消</div>
         </form>
     </Box>
 </template>
 <script setup>
-import Box from '../components/box.vue';
+import Box from '../../components/box.vue';
 import { ref, onMounted } from 'vue';
-import { shortAlert } from '../alert.js';
+import { shortAlert } from '../../alert.js';
 import Swal from 'sweetalert2';
 import { useRoute, useRouter } from 'vue-router';
-import { register } from '../api/register.js'
-import { accountRule, passwordRule } from '../common/field-rule.js';
-// import ParticleCanvas from '../components/particleCanvas.vue'
+import { readAccount, updatePassword } from '../../api/member.js';
+import { passwordRule } from '../../common/field-rule.js';
 
-const account = ref('');
+const account = ref('');            // 已選擇帳號
+const accounts = ref([]);
 const password = ref('');
 const passwordCheck = ref('');
 const userInput = ref('');          // 使用者輸入的驗證碼
@@ -56,14 +60,30 @@ const captchaCanvas = ref(null);    // 參考 canvas 元素
 const route = useRoute();
 const router = useRouter();
 const serverCode = ref('');         // 伺服器代號
-const token = ref('');      
-const accountMsg = ref('');        
-const passwordMsg = ref('');      
+const token = ref('');   
+const passwordMsg = ref('');           
 
-onMounted(() => {
+onMounted(async() => {
     serverCode.value = route.params.serverCode;
     token.value = route.params.token;
     generateCaptcha();
+
+    const result = await readAccount({token: token.value});
+
+    if (result.success){
+        accounts.value = result.data
+    }else{
+        Swal.fire({
+            position: 'center',
+            icon: 'warning',
+            title: '系統提示',
+            text: '未註冊帳號，將為您跳轉至註冊頁',
+            showConfirmButton: false,
+            timer: 1800
+        }).then(() => {
+            router.push(`/verify/${serverCode.value}`);
+        });
+    }
 })
 
 const getLuminance = (r, g, b) => {
@@ -216,7 +236,7 @@ const submit = async () => {
                     password: password.value,
                     token: token.value,
                 }
-                const result = await register(formData);
+                const result = await updatePassword(formData);
                 const alertIcon = (result.success) ? 'success' : 'error';
 
                 Swal.fire({
@@ -238,11 +258,6 @@ const submit = async () => {
     } 
 }
 
-const accountBlur = () => { 
-    const result = accountRule(account.value);
-    accountMsg.value = (result.success === false) ? result.msg : '';
-}
-
 const passwordBlur = () => {
     const result = passwordRule(password.value);
     passwordMsg.value = (result.success === false) ? result.msg : '';
@@ -251,11 +266,9 @@ const passwordBlur = () => {
 /* 欄位驗證 */
 const fieldValidation = () => {
     let result = false;
-    const accountResult = accountRule(account.value);
     const passwordResult = passwordRule(password.value);
 
-    if (accountResult.success === true 
-    && passwordResult.success === true){
+    if (passwordResult.success === true){
         result = true;
     }else{
         result = false;
@@ -274,7 +287,8 @@ h2, h3, #form_area{
     /* margin-top: 0.5em; */
     position: relative;
 }
-.inp_group input{
+.inp_group input,
+.inp_group select{
     position: relative;
     width: 100%;
     padding: 20px 10px 10px;
@@ -283,6 +297,7 @@ h2, h3, #form_area{
     outline: none;
     box-shadow: none;
     color: #fff;
+    background-color: transparent;
     font-size: 1em;
     letter-spacing: 0.05em;
     transition: 0.5s;
@@ -298,7 +313,9 @@ h2, h3, #form_area{
     transition: 0.5s;
 }
 .inp_group input:valid ~span,
-.inp_group input:focus ~span{
+.inp_group input:focus ~span,
+.inp_group select:valid ~span,
+.inp_group select:focus ~span{
     font-size: 0.75em;
     transform: translate(-10px, -15px);
 }

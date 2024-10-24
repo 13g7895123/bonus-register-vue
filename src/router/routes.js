@@ -1,31 +1,31 @@
-const routes = [ 
-    {
-        path: "/box",
-        component: () => import('../components/box.vue'),
-    },
-    {
-        path: "/demo/1",
-        component: () => import('../view/demo/1.vue'),
-    },
-    {
-        path: "/demo/2",
-        component: () => import('../view/demo/2.vue'),
-    },
-    {
-        path: "/demo/3",
-        component: () => import('../view/demo/3.vue'),
-    },
-    {
-        path: "/demo/4",
-        component: () => import('../view/demo/verifyCode.vue'),
-    },
+const routes = [
     {
         path: "/verify/:serverCode",
         component: () => import('../view/verify.vue'),
     },
     {
-        path: "/register/:serverCode",
+        path: "/register/:serverCode/:token",
         component: () => import('../view/register.vue'),
+    },
+    {
+        path: "/forget-password/verify/:serverCode",
+        component: () => import('../view/forgetPassword/verify.vue'),
+    },
+    {
+        path: "/forget-password/:serverCode/:token",
+        component: () => import('../view/forgetPassword/forget-password.vue'),
+    },
+    {
+        path: "/account-transfer/choose-identify/:serverCode",
+        component: () => import('../view/account-transfer/choose-identify.vue'),
+    },
+    {
+        path: "/account-transfer/transfer/:serverCode/:token",
+        component: () => import('../view/account-transfer/Transfer.vue'),
+    },
+    {
+        path: "/account-transfer/receiver/:serverCode/:token",
+        component: () => import('../view/account-transfer/Receiver.vue'),
     },
 ]
 

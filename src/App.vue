@@ -1,3 +1,5 @@
 <template>
-  <router-view/>
+  <div class="flex justify-center items-center">
+    <router-view/>
+  </div>
 </template>
